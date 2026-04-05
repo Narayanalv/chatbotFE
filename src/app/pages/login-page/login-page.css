@@ -1,0 +1,43 @@
+.flip-container {
+    perspective: 1500px;
+}
+  
+.flip-inner {
+    display: grid;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    width: 100%;
+}
+  
+.flip-inner.is-flipped {
+    transform: rotateY(180deg);
+}
+  
+.flip-front,
+.flip-back {
+    grid-area: 1 / 1;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    width: 100%;
+    /* Hide the opposite side from mouse clicks when flipped away */
+    pointer-events: none; 
+}
+  
+.flip-front {
+    transform: rotateY(0deg);
+}
+  
+.flip-back {
+    transform: rotateY(180deg);
+}
+
+.is-flipped .flip-back {
+    pointer-events: auto;
+}
+.flip-front {
+    pointer-events: auto;
+}
+.is-flipped .flip-front {
+    pointer-events: none;
+}
