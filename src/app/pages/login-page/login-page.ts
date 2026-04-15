@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Header } from '../header/header';
 import { RouterLink, Router } from '@angular/router';
 import { ApiService } from '../../api/apiCall';
+import { AuthService } from '../../api/auth';
 
 @Component({
   selector: 'app-login-page',
@@ -9,13 +10,30 @@ import { ApiService } from '../../api/apiCall';
   templateUrl: './login-page.html',
   styleUrl: './login-page.css',
 })
-export class LoginPage {
-  isLoginPage = true;
-  isOtpMode = false;
-  viewPasword = false;
-  viewCPassword = false;
-  email: string = '';
-  constructor(private apiService: ApiService, private router: Router) { }
+export class LoginPage implements OnInit {
+  isLogin: boolean;
+  isLoginPage: boolean;
+  isOtpMode: boolean
+  viewPasword: boolean;
+  viewCPassword: boolean;
+  email: string;
+
+  constructor(private apiService: ApiService, private router: Router, private authService: AuthService) {
+    this.isLoginPage = true;
+    this.isOtpMode = false;
+    this.viewPasword = false;
+    this.viewCPassword = false;
+    this.isLogin = false;
+    this.email = '';
+  }
+
+  async ngOnInit() {
+    this.isLogin = await this.authService.isLogin();
+    this.isLoginPage = !this.isLogin;
+    if (this.isLogin) {
+      this.router.navigate(['/']);
+    }
+  }
   toggleForm() {
     this.isLoginPage = !this.isLoginPage;
     this.isOtpMode = false;

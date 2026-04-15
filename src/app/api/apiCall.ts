@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { AddChatBot, BaseResponse, Login, LoginResponse, Register, VerifyOTP, VerifyOTPResponse } from '../model/todos.type';
+import { getAccessToken } from './auth';
 
 // You can access your Base API URL like this:
 export const API_BASE_URL = environment.apiUrl;
@@ -14,6 +15,8 @@ export const apiEndpoints = {
     addChatBot: `${API_BASE_URL}/api/addChatBot`,
     createApiKey: `${API_BASE_URL}/api/createApiKey`,
     getApiKey: `${API_BASE_URL}/api/getApiKey`,
+    isLoggedIn: `${API_BASE_URL}/api/isLoggedIn`,
+    logout: `${API_BASE_URL}/api/logout`,
 };
 
 const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -35,14 +38,26 @@ export class ApiService {
     }
 
     addChatBot(data: AddChatBot) {
+        headers.set('Authorization', `Bearer ${getAccessToken()}`);
         return this.http.post<BaseResponse>(apiEndpoints.addChatBot, data, { headers });
     }
 
     createApiKey(id: number) {
+        headers.set('Authorization', `Bearer ${getAccessToken()}`);
         return this.http.get(`${apiEndpoints.createApiKey}/${id}`, { headers });
     }
 
     getApiKey(id: number) {
+        headers.set('Authorization', `Bearer ${getAccessToken()}`);
         return this.http.get(`${apiEndpoints.getApiKey}/${id}`, { headers });
+    }
+    isLoggedIn() {
+        headers.set('Authorization', `Bearer ${getAccessToken()}`);
+        return this.http.get<BaseResponse>(`${apiEndpoints.isLoggedIn}`, { headers });
+    }
+
+    logout() {
+        headers.set('Authorization', `Bearer ${getAccessToken()}`);
+        return this.http.get<BaseResponse>(`${apiEndpoints.logout}`, { headers });
     }
 }

@@ -51,9 +51,9 @@
                             password?</a>
                     </div>
 
-                    <button type="submit"
-                        class="w-full bg-blue-600 dark:bg-[#6875f5] hover:bg-blue-700 dark:hover:bg-[#5865e5] text-white font-bold py-2.5 rounded-lg shadow-sm transition-colors mt-2 tracking-wide">
-                        Sign in
+                    <button type="submit" [disabled]="isLoading"
+                        class="w-full bg-blue-600 dark:bg-[#6875f5] hover:bg-blue-700 dark:hover:bg-[#5865e5] disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold py-2.5 rounded-lg shadow-sm transition-colors mt-2 tracking-wide">
+                        {{ isLoading ? 'Signing in...' : 'Sign in' }}
                     </button>
                 </form>
 
@@ -182,9 +182,9 @@
                         </div>
                     </div>
 
-                    <button type="submit"
-                        class="w-full bg-blue-600 dark:bg-[#6875f5] hover:bg-blue-700 dark:hover:bg-[#5865e5] text-white font-bold py-2.5 rounded-lg shadow-sm transition-colors mt-2 tracking-wide">
-                        Create account
+                    <button type="submit" [disabled]="isLoading"
+                        class="w-full bg-blue-600 dark:bg-[#6875f5] hover:bg-blue-700 dark:hover:bg-[#5865e5] disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold py-2.5 rounded-lg shadow-sm transition-colors mt-2 tracking-wide">
+                        {{ isLoading ? 'Creating account...' : 'Create account' }}
                     </button>
 
                     <!-- Divider for Register -->
@@ -237,9 +237,9 @@
                             class="w-full tracking-[0.5em] text-center text-xl font-medium px-3.5 py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#1a1c23] text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 dark:focus:ring-[#6875f5]/50 dark:focus:border-[#6875f5] shadow-sm transition-all" />
                     </div>
 
-                    <button type="submit"
-                        class="w-full bg-blue-600 dark:bg-[#6875f5] hover:bg-blue-700 dark:hover:bg-[#5865e5] text-white font-bold py-2.5 rounded-lg shadow-sm transition-colors mt-2 tracking-wide">
-                        Verify Account
+                    <button type="submit" [disabled]="isLoading"
+                        class="w-full bg-blue-600 dark:bg-[#6875f5] hover:bg-blue-700 dark:hover:bg-[#5865e5] disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold py-2.5 rounded-lg shadow-sm transition-colors mt-2 tracking-wide">
+                        {{ isLoading ? 'Verifying...' : 'Verify Account' }}
                     </button>
 
                     <p class="text-center mt-2">
