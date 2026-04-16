@@ -3,9 +3,11 @@ import { Header } from '../header/header';
 import { RouterLink, Router } from '@angular/router';
 import { ApiService } from '../../api/apiCall';
 import { AuthService } from '../../api/auth';
+import { ToastService } from '../../api/toastService/toast.service';
 
 @Component({
   selector: 'app-login-page',
+  standalone: true,
   imports: [Header, RouterLink],
   templateUrl: './login-page.html',
   styleUrl: './login-page.css',
@@ -16,14 +18,16 @@ export class LoginPage implements OnInit {
   isOtpMode: boolean
   viewPasword: boolean;
   viewCPassword: boolean;
+  isLoading: boolean;
   email: string;
 
-  constructor(private apiService: ApiService, private router: Router, private authService: AuthService) {
+  constructor(private apiService: ApiService, private router: Router, private authService: AuthService, private toast: ToastService) {
     this.isLoginPage = true;
     this.isOtpMode = false;
     this.viewPasword = false;
     this.viewCPassword = false;
     this.isLogin = false;
+    this.isLoading = false;
     this.email = '';
   }
 
@@ -65,12 +69,11 @@ export class LoginPage implements OnInit {
           if (res.accessToken) {
             localStorage.setItem('accessToken', res.accessToken);
             this.router.navigate(['/']);
-          } else {
-            this.showOtpForm();
           }
         },
         error: (err) => {
           console.log(err);
+          this.toast.showError(err.error?.message || 'Login failed. Please try again.');
         }
       })
   }
@@ -86,6 +89,7 @@ export class LoginPage implements OnInit {
         },
         error: (err) => {
           console.log(err);
+          this.toast.showError(err.error?.message || 'Login failed. Please try again.');
         }
       })
   }
@@ -103,6 +107,7 @@ export class LoginPage implements OnInit {
         },
         error: (err) => {
           console.log(err);
+          this.toast.showError(err.error?.message || 'Login failed. Please try again.');
         }
       })
   }

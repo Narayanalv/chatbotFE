@@ -44,9 +44,15 @@ export function getAccessToken(): string | null {
     return null;
 }
 
-export const authInterceptor: HttpInterceptorFn = (req, next) => {
-    const token = localStorage.getItem('accessToken');
+const PUBLIC_URLS = ['/api/login', '/api/register', '/api/verifyOTP'];
 
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+    const isPublic = PUBLIC_URLS.some(url => req.url.includes(url));
+    if (isPublic) {
+        return next(req);
+    }
+
+    const token = localStorage.getItem('accessToken');
     if (token) {
         const cloned = req.clone({
             setHeaders: {

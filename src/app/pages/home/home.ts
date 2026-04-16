@@ -3,6 +3,7 @@ import { Header } from '../header/header';
 
 @Component({
   selector: 'app-home',
+  standalone: true,
   imports: [Header],
   templateUrl: './home.html',
   styleUrl: './home.css',

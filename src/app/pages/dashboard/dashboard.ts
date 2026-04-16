@@ -3,6 +3,7 @@ import { Header } from '../header/header';
 
 @Component({
   selector: 'app-dashboard',
+  standalone: true,
   imports: [
     Header
   ],

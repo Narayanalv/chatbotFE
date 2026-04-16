@@ -5,6 +5,7 @@ import { AuthService } from '../../api/auth';
 
 @Component({
   selector: 'app-header',
+  standalone: true,
   imports: [RouterLink],
   templateUrl: './header.html',
   styleUrl: './header.css',
