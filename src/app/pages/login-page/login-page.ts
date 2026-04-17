@@ -10,37 +10,34 @@ import { ToastService } from '../../api/toastService/toast.service';
   standalone: true,
   imports: [Header, RouterLink],
   templateUrl: './login-page.html',
-  styleUrl: './login-page.css',
+  styleUrls: ['./login-page.css'],
 })
 export class LoginPage implements OnInit {
   isLogin: boolean;
-  isLoginPage: boolean;
-  isOtpMode: boolean
   viewPasword: boolean;
   viewCPassword: boolean;
   isLoading: boolean;
   email: string;
+  page: string;
+
 
   constructor(private apiService: ApiService, private router: Router, private authService: AuthService, private toast: ToastService) {
-    this.isLoginPage = true;
-    this.isOtpMode = false;
     this.viewPasword = false;
     this.viewCPassword = false;
     this.isLogin = false;
     this.isLoading = false;
     this.email = '';
+    this.page = 'login';
   }
 
   async ngOnInit() {
     this.isLogin = await this.authService.isLogin();
-    this.isLoginPage = !this.isLogin;
     if (this.isLogin) {
       this.router.navigate(['/']);
     }
   }
-  toggleForm() {
-    this.isLoginPage = !this.isLoginPage;
-    this.isOtpMode = false;
+  toggleForm(form: string) {
+    this.page = form;
   }
 
   togglePassword() {
@@ -52,11 +49,7 @@ export class LoginPage implements OnInit {
   }
 
   showOtpForm() {
-    this.isOtpMode = true;
-  }
-
-  backToRegister() {
-    this.isOtpMode = false;
+    this.page = 'verify';
   }
 
   login(email: string, password: string, rememberMe: boolean) {
@@ -85,7 +78,7 @@ export class LoginPage implements OnInit {
         next: (res) => {
           console.log(res);
           this.email = email;
-          this.showOtpForm();
+          this.toggleForm('verify');
         },
         error: (err) => {
           console.log(err);

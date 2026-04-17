@@ -1,5 +1,6 @@
 .flip-container {
     perspective: 1500px;
+    overflow: hidden;
 }
   
 .flip-inner {

@@ -44,10 +44,10 @@
             Get Started Free
         </button> -->
         @if (!isUserLogin) {
-        <button type="button" routerLink="/login"
-            class="text-sm font-semibold text-gray-900 border border-gray-300 dark:border-gray-600 dark:text-white bg-white dark:bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg px-5 py-2 transition-colors">
+        <a routerLink="/login"
+            class="text-sm font-semibold text-gray-900 border border-gray-300 dark:border-gray-600 dark:text-white bg-white dark:bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg px-5 py-2 transition-colors inline-flex items-center justify-center">
             Login
-        </button>
+        </a>
         }@else{
         <button type="button" (click)="logout()"
             class="text-sm font-semibold text-gray-900 border border-gray-300 dark:border-gray-600 dark:text-white bg-white dark:bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg px-5 py-2 transition-colors">

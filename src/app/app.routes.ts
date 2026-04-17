@@ -12,6 +12,14 @@ export const routes: Routes = [
         path: "login",
         component: LoginPage
     },
+    // {
+    //     path: "register",
+    //     component: LoginPage
+    // },
+    // {
+    //     path: "verify-otp",
+    //     component: LoginPage
+    // },
     {
         path: "dashboard",
         component: Dashboard
