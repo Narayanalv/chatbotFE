@@ -1,10 +1,10 @@
 <app-header />
 <main class="w-full flex items-center justify-center p-4 min-h-[calc(100vh-5rem)] pb-16">
     <!-- Flip Container -->
-    <div class="flip-container w-full max-w-[440px] shadow-2xl rounded-xl">
+    <div class="flip-container w-full max-w-[440px] bg-white dark:bg-[#181a20] shadow-[0_8px_30px_rgb(0,0,0,0.06)] sm:shadow-[0_16px_50px_rgb(0,0,0,0.1)] dark:shadow-[0_8px_40px_rgba(0,0,0,0.4)] dark:sm:shadow-[0_16px_50px_rgba(0,0,0,0.6)] rounded-2xl border border-gray-100 dark:border-gray-800/60 p-6 sm:p-8">
         <div class="flip-inner" [class.is-flipped]="page !== 'login'">
             <!-- FRONT: Login Form -->
-            <div class="flip-front flex flex-col gap-8 pb-10">
+            <div class="flip-front flex flex-col gap-6">
                 @if (page === 'login') {
                         <!-- Header Text -->
                         <div class="flex flex-col gap-1.5">
@@ -93,7 +93,7 @@
             </div>
 
             <!-- BACK: Register/Verify Form -->
-            <div class="flip-back flex flex-col gap-8 pb-10">
+            <div class="flip-back flex flex-col gap-6">
                 @switch (page) {
                     @case ('register') {
                         <!-- Header Text -->
