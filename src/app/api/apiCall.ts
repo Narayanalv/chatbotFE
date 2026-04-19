@@ -15,7 +15,6 @@ export const apiEndpoints = {
     addChatBot: `${API_BASE_URL}/api/addChatBot`,
     createApiKey: `${API_BASE_URL}/api/createApiKey`,
     getApiKey: `${API_BASE_URL}/api/getApiKey`,
-    isLoggedIn: `${API_BASE_URL}/api/isLoggedIn`,
     logout: `${API_BASE_URL}/api/logout`,
 };
 
@@ -50,10 +49,6 @@ export class ApiService {
     getApiKey(id: number) {
         headers.set('Authorization', `Bearer ${getAccessToken()}`);
         return this.http.get(`${apiEndpoints.getApiKey}/${id}`, { headers });
-    }
-    isLoggedIn() {
-        headers.set('Authorization', `Bearer ${getAccessToken()}`);
-        return this.http.get<BaseResponse>(`${apiEndpoints.isLoggedIn}`, { headers });
     }
 
     logout() {

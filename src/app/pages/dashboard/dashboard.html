@@ -2,49 +2,46 @@
 <div class="flex flex-row">
     <!-- <div class="bg-red w-[15%] h-[100%] text-center">
     </div> -->
-    <!-- <div
-        class="relative flex h-[calc(100vh-10rem)] w-full max-w-[15rem] flex-col rounded-xl bg-clip-border p-4 shadow-xl shadow"> -->
-        <nav class="flex min-w-[240px] flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700">
-            <aside 
-                class="fixed h-screen transition-transform -translate-x-full sm:translate-x-0"
-                aria-label="Sidebar">
-                <div class="h-full px-3 py-4 overflow-y-auto bg-neutral-primary-soft border-e border-default">
-                    <ul class="space-y-2 font-medium">
-                        <li>
-                            <a
-                                class="flex items-center px-2 py-1.5 text-body rounded-base hover:bg-neutral-tertiary hover:text-fg-brand group">
-                                <svg class="w-5 h-5 transition duration-75 group-hover:text-fg-brand" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                    viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2" d="M10 6.025A7.5 7.5 0 1 0 17.975 14H10V6.025Z" />
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M13.5 3c-.169 0-.334.014-.5.025V11h7.975c.011-.166.025-.331.025-.5A7.5 7.5 0 0 0 13.5 3Z" />
-                                </svg>
-                                <span class="ms-3">Dashboard</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#"
-                                class="flex items-center px-2 py-1.5 text-body rounded-base hover:bg-neutral-tertiary hover:text-fg-brand group">
-                                <svg class="shrink-0 w-5 h-5 transition duration-75 group-hover:text-fg-brand"
-                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M4 13h3.439a.991.991 0 0 1 .908.6 3.978 3.978 0 0 0 7.306 0 .99.99 0 0 1 .908-.6H20M4 13v6a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6M4 13l2-9h12l2 9M9 7h6m-7 3h8" />
-                                </svg>
-                                <span class="flex-1 ms-3 whitespace-nowrap">My Chat Bots</span>
-                                <span
-                                    class="inline-flex items-center justify-center w-4.5 h-4.5 ms-2 text-xs font-medium text-fg-danger-strong bg-danger-soft border border-danger-subtle rounded-full">2</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </aside>
-        </nav>
-    <!-- </div> -->
+    <!-- Sidebar wrapper -->
+<aside id="sidebar" class="w-64 flex flex-col bg-white border-r border-gray-200 transition-all duration-200 overflow-hidden">
+
+  <!-- Toggle button (inside sidebar) -->
+  <div class="p-2">
+    <button id="toggle-btn" onclick="toggleSidebar()"
+      class="flex items-center justify-center w-9 h-9 rounded-lg border border-gray-200
+             bg-transparent hover:bg-gray-100 text-gray-500 transition-colors">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" viewBox="0 0 24 24">
+        <path d="M5 7h14M5 12h14M5 17h10"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Nav links -->
+  <nav class="px-2 flex-1">
+    <ul class="space-y-0.5">
+      <li>
+        <a href="#"
+          class="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-sm text-gray-700
+                 hover:bg-gray-100 hover:text-blue-600 group transition-colors">
+          <!-- icon -->
+          <span>Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a href="#"
+          class="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-sm text-gray-700
+                 hover:bg-gray-100 hover:text-blue-600 group transition-colors">
+          <!-- icon -->
+          <span class="flex-1">Kanban</span>
+          <span class="text-[10px] font-medium px-1.5 py-0.5 rounded
+                       bg-gray-100 border border-gray-300 text-gray-500">Pro</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</aside>
+    </div>
     <div class="w-[85%] h-[100%] text-center">
         data
     </div>
