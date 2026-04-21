@@ -3,12 +3,12 @@
     <!-- <div class="bg-red w-[15%] h-[100%] text-center">
     </div> -->
     <!-- Sidebar wrapper -->
-<aside id="sidebar" class="w-64 flex flex-col bg-white border-r border-gray-200 transition-all duration-200 overflow-hidden">
+<aside id="sidebar" class="w-64 flex flex-col bg-gray border-r border-gray-200 transition-all duration-200 overflow-hidden">
 
   <!-- Toggle button (inside sidebar) -->
   <div class="p-2">
     <button id="toggle-btn" onclick="toggleSidebar()"
-      class="flex items-center justify-center w-9 h-9 rounded-lg border border-gray-200
+      class="flex items-center justify-center bg-gray-200 w-9 h-9 rounded-lg border border-gray-200
              bg-transparent hover:bg-gray-100 text-gray-500 transition-colors">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
            stroke-linecap="round" viewBox="0 0 24 24">
@@ -43,6 +43,9 @@
 </aside>
     </div>
     <div class="w-[85%] h-[100%] text-center">
-        data
+        @if (chatBotList.length > 0) {
+            <p>Chatbots:</p>
+        }@else {
+            <p>No chatbots found.</p>
+        }
     </div>
-</div>

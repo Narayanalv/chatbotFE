@@ -36,3 +36,17 @@ export interface AddChatBot {
     topic: string
     image: File
 }
+
+export interface ChatBotResponse extends BaseResponse {
+    chatBot: ChatBot[]
+}
+
+export interface ChatBot {
+    id: number
+    title: string
+    topic: string
+    imageUrl: string
+    chunkedData: string
+    status: string
+    CreatedDate: string
+}

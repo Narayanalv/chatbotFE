@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { AddChatBot, BaseResponse, Login, LoginResponse, Register, VerifyOTP, VerifyOTPResponse } from '../model/todos.type';
+import { AddChatBot, BaseResponse, ChatBotResponse, Login, LoginResponse, Register, VerifyOTP, VerifyOTPResponse } from '../model/todos.type';
 import { getAccessToken } from './auth';
 
 // You can access your Base API URL like this:
@@ -16,6 +16,7 @@ export const apiEndpoints = {
     createApiKey: `${API_BASE_URL}/api/createApiKey`,
     getApiKey: `${API_BASE_URL}/api/getApiKey`,
     logout: `${API_BASE_URL}/api/logout`,
+    getBots: `${API_BASE_URL}/api/getBots`,
 };
 
 const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -44,6 +45,11 @@ export class ApiService {
     createApiKey(id: number) {
         headers.set('Authorization', `Bearer ${getAccessToken()}`);
         return this.http.get(`${apiEndpoints.createApiKey}/${id}`, { headers });
+    }
+
+    getBots() {
+        headers.set('Authorization', `Bearer ${getAccessToken()}`);
+        return this.http.get<ChatBotResponse>(`${apiEndpoints.getBots}`, { headers });
     }
 
     getApiKey(id: number) {
