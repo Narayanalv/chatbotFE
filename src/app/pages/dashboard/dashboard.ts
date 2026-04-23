@@ -18,12 +18,13 @@ import { ToastService } from '../../api/toastService/toast.service';
 })
 export class Dashboard implements OnInit {
   chatBotList: ChatBot[] = [];
+  isSidebarOpen: boolean = true;
   constructor(
     private authService: AuthService,
     private apiService: ApiService,
     private router: Router,
     private toast: ToastService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     if (!this.authService.isLogin()) {
@@ -33,6 +34,10 @@ export class Dashboard implements OnInit {
     this.loadBots();
   }
 
+  toggleSidebar(): void {
+    this.isSidebarOpen = !this.isSidebarOpen;
+  }
+
   loadBots() {
     this.apiService.getBots().subscribe({
       next: (response: ChatBotResponse) => {
@@ -40,9 +45,9 @@ export class Dashboard implements OnInit {
         this.chatBotList = response.chatBot;
       },
       error: (err) => {
-          console.log(err);
-          this.toast.showError(err.error?.message || 'Login failed. Please try again.');
-        }
+        console.log(err);
+        this.toast.showError(err.error?.message || 'Login failed. Please try again.');
+      }
     });
   }
 }
