@@ -10,6 +10,15 @@
   min-width: 240px !important;
 }
 
+/* Prevent the fixed toast container from blocking clicks on elements underneath it */
+.p-toast {
+  pointer-events: none !important;
+}
+
+.p-toast .p-toast-message {
+  pointer-events: auto !important;
+}
+
 .p-toast-sm .p-toast-message {
   font-size: 0.875rem !important;
   padding: 0.75rem 0.9rem !important;

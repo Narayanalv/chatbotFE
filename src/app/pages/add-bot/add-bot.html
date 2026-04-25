@@ -1,0 +1,53 @@
+<div class="fixed inset-0 z-50 bg-black/50 backdrop-blur-md w-full h-full p-6 flex justify-center items-center">
+    <div
+        class="shadow-2xl rounded-2xl bg-white dark:bg-neutral-900 p-8 flex flex-col items-center justify-center gap-6 w-full max-w-2xl border border-gray-200 dark:border-neutral-800">
+
+        <div class="w-full text-left">
+            <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Add New Knowledge</h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Provide a title, topic, and file for the bot.</p>
+        </div>
+
+        <div class="w-full space-y-5">
+            <div class="w-full">
+                <label for="input-title"
+                    class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200">Title</label>
+                <input id="input-title" type="text" #title
+                    class="py-2.5 sm:py-3 px-4 rounded-xl block w-full bg-gray-50 border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 border sm:text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 transition-colors"
+                    placeholder="Enter title">
+            </div>
+
+            <div class="w-full">
+                <label for="input-topic"
+                    class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200">Topic</label>
+                <input id="input-topic" type="text" #topic
+                    class="py-2.5 sm:py-3 px-4 rounded-xl block w-full bg-gray-50 border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 border sm:text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 transition-colors"
+                    placeholder="Enter topic">
+            </div>
+        </div>
+
+        <div class="flex items-center justify-center w-full mt-2">
+            <label for="dropzone-file"
+                class="flex flex-col items-center justify-center w-full h-64 bg-gray-50 dark:bg-neutral-800 border-2 border-dashed border-gray-300 dark:border-neutral-600 rounded-xl cursor-pointer hover:bg-gray-100 dark:hover:bg-neutral-700/80 transition-colors">
+                <div class="flex flex-col items-center justify-center text-body pt-5 pb-6">
+                    <svg class="w-10 h-10 mb-4 text-blue-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 17h3a3 3 0 0 0 0-6h-.025a5.56 5.56 0 0 0 .025-.5A5.5 5.5 0 0 0 7.207 9.021C7.137 9.017 7.071 9 7 9a4 4 0 1 0 0 8h2.167M12 19v-9m0 0-2 2m2-2 2 2" />
+                    </svg>
+                    <p class="mb-2 text-sm text-gray-700 dark:text-gray-200"><span
+                            class="font-semibold text-blue-600 dark:text-blue-400">Click to upload</span> or drag
+                        and drop</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Any supported document or file</p>
+                </div>
+                <input id="dropzone-file" type="file" accept=".pdf" #file class="hidden" />
+            </label>
+        </div>
+
+        <div class="w-full flex justify-end gap-3 mt-4">
+            <button type="button" (click)="close.emit()"
+                class="py-2.5 px-6 rounded-xl text-gray-700 dark:text-gray-200 bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 hover:bg-gray-50 dark:hover:bg-neutral-700 transition-colors text-sm font-semibold shadow-sm">Cancel</button>
+            <button type="button" (click)="addBot(title.value, topic.value, file.files ? file.files[0] : null)"
+                class="py-2.5 px-6 rounded-xl text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all text-sm font-semibold shadow-lg shadow-blue-500/30">Submit</button>
+        </div>
+    </div>
+</div>

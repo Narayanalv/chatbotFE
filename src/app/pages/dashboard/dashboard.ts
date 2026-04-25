@@ -1,17 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Header } from '../header/header';
 import { AuthService } from '../../api/auth';
 import { RouterLink, Router } from '@angular/router';
 import { ChatBot, ChatBotResponse } from '../../model/todos.type';
 import { ApiService } from '../../api/apiCall';
 import { ToastService } from '../../api/toastService/toast.service';
+import { AddBot } from '../add-bot/add-bot';
+import { ListBots } from '../list-bots/list-bots';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
     Header,
-    RouterLink
+    RouterLink,
+    AddBot,
+    ListBots
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
@@ -19,11 +23,14 @@ import { ToastService } from '../../api/toastService/toast.service';
 export class Dashboard implements OnInit {
   chatBotList: ChatBot[] = [];
   isSidebarOpen: boolean = true;
+  addBot: boolean = false;
+  botsLoading: boolean = false;
   constructor(
     private authService: AuthService,
     private apiService: ApiService,
     private router: Router,
     private toast: ToastService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -38,15 +45,20 @@ export class Dashboard implements OnInit {
     this.isSidebarOpen = !this.isSidebarOpen;
   }
 
-  loadBots() {
+  loadBots(isBackgroundUpdate = false) {
+    if (!isBackgroundUpdate) {
+      this.botsLoading = true;
+    }
     this.apiService.getBots().subscribe({
       next: (response: ChatBotResponse) => {
-        console.log(response);
-        this.chatBotList = response.chatBot;
+        this.chatBotList = response.listBot || [];
+        this.botsLoading = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
-        console.log(err);
-        this.toast.showError(err.error?.message || 'Login failed. Please try again.');
+        this.toast.showError("Failed to load bots");
+        this.botsLoading = false;
+        this.cdr.detectChanges();
       }
     });
   }

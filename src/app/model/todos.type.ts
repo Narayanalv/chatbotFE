@@ -38,7 +38,8 @@ export interface AddChatBot {
 }
 
 export interface ChatBotResponse extends BaseResponse {
-    chatBot: ChatBot[]
+    listBot: ChatBot[],
+    hasData: boolean
 }
 
 export interface ChatBot {
@@ -46,7 +47,22 @@ export interface ChatBot {
     title: string
     topic: string
     imageUrl: string
-    chunkedData: string
+    chunkedData: 1 | 2 | 0
     status: string
     CreatedDate: string
+}
+
+export interface ApiKey extends BaseResponse {
+    apiKey: String
+}
+
+export interface ApiKeyResponse extends BaseResponse {
+    apiKeyList: ApiKeyList[]
+}
+
+export interface ApiKeyList {
+    id: number
+    apiKey: string // masked apiKey
+    status: boolean
+    visible?: boolean
 }
