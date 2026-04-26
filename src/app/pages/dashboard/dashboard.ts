@@ -56,7 +56,6 @@ export class Dashboard implements OnInit {
         this.cdr.detectChanges();
       },
       error: (err) => {
-        this.toast.showError("Failed to load bots");
         this.botsLoading = false;
         this.cdr.detectChanges();
       }

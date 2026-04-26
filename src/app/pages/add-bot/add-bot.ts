@@ -32,7 +32,6 @@ export class AddBot {
         },
         error: (err) => {
           console.log(err);
-          this.toast.showError(err.error.message)
         }
       })
     }

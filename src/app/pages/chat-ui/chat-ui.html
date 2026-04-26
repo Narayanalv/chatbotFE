@@ -1,0 +1,121 @@
+<div class="fixed bottom-6 right-6 w-96 max-w-[calc(100vw-3rem)] bg-white dark:bg-neutral-900 rounded-2xl shadow-2xl flex flex-col border border-gray-200 dark:border-neutral-800 z-50 overflow-hidden transition-all duration-300"
+    [class.h-auto]="isMinimized" [class.h-[600px]]="!isMinimized" [class.max-h-[calc(100vh-3rem)]]="!isMinimized">
+    <!-- Header -->
+    <div class="flex items-center justify-between p-4 border-b border-gray-100 dark:border-neutral-800 bg-indigo-600 text-white cursor-pointer select-none"
+        (click)="toggleMinimize()">
+        <div class="flex items-center gap-3">
+            <div class="relative w-8 h-8 overflow-hidden bg-white/20 rounded-full flex items-center justify-center">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z">
+                    </path>
+                </svg>
+            </div>
+            <div>
+                <h3 class="font-bold text-sm">{{ botData.title }}</h3>
+            </div>
+        </div>
+        <div class="flex items-center gap-1">
+            <button (click)="$event.stopPropagation(); toggleMinimize()"
+                class="text-indigo-100 hover:text-white transition-colors p-1 hover:bg-white/10 rounded-lg"
+                [title]="isMinimized ? 'Maximize' : 'Minimize'">
+                @if (isMinimized) {
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16" />
+                </svg>
+                } @else {
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+                }
+            </button>
+            <button (click)="$event.stopPropagation(); close.emit()"
+                class="text-indigo-100 hover:text-white transition-colors p-1 hover:bg-white/10 rounded-lg"
+                title="Close">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    @if (!isMinimized) {
+    <!-- Messages Area -->
+    <div class="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-neutral-900/50 flex flex-col gap-4">
+        @for (msg of messages; track $index) {
+            @if (msg.sender === 'bot') {
+            <!-- Bot Message -->
+            <div class="flex items-start gap-2.5">
+                <div
+                    class="relative w-8 h-8 overflow-hidden bg-gray-200 dark:bg-neutral-700 rounded-full shrink-0 flex items-center justify-center">
+                    <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                            clip-rule="evenodd">
+                        </path>
+                    </svg>
+                </div>
+                <div
+                    class="flex flex-col w-full max-w-[280px] leading-1.5 p-3 bg-white dark:bg-neutral-800 border border-gray-100 dark:border-neutral-700 rounded-e-xl rounded-es-xl shadow-sm">
+                    <div class="flex items-center space-x-2 rtl:space-x-reverse mb-1">
+                        <span class="text-sm font-semibold text-gray-900 dark:text-white">{{ botData.title }}</span>
+                        <span class="text-xs text-gray-500 dark:text-gray-400">{{ msg.time | date:'shortTime' }}</span>
+                    </div>
+                    <p class="text-sm text-gray-800 dark:text-gray-200 leading-relaxed" [innerHTML]="msg.text"></p>
+                </div>
+            </div>
+            } @else {
+            <!-- User Message -->
+            <div class="flex items-start justify-end gap-2.5">
+                <div
+                    class="flex flex-col w-full max-w-[280px] leading-1.5 p-3 bg-indigo-600 border border-indigo-500 rounded-s-xl rounded-ee-xl shadow-sm">
+                    <div class="flex items-center justify-end space-x-2 rtl:space-x-reverse mb-1">
+                        <span class="text-xs text-indigo-100">{{ msg.time | date:'shortTime' }}</span>
+                        <span class="text-sm font-semibold text-white">You</span>
+                    </div>
+                    <p class="text-sm text-white leading-relaxed">{{ msg.text }}</p>
+                </div>
+            </div>
+            }
+        }
+
+        @if (inputDisabled) {
+        <!-- Typing indicator -->
+        <div class="flex items-start gap-2.5">
+            <div
+                class="relative w-8 h-8 overflow-hidden bg-gray-200 dark:bg-neutral-700 rounded-full shrink-0 flex items-center justify-center">
+                <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                        clip-rule="evenodd">
+                    </path>
+                </svg>
+            </div>
+            <div
+                class="flex flex-col leading-1.5 p-3 bg-white dark:bg-neutral-800 border border-gray-100 dark:border-neutral-700 rounded-e-xl rounded-es-xl shadow-sm w-16">
+                <div class="flex gap-1.5 py-1 justify-center">
+                    <div class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"></div>
+                    <div class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                    <div class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+
+    <!-- Input Area -->
+    <div class="p-3 border-t border-gray-100 dark:border-neutral-800 bg-white dark:bg-neutral-900">
+        <div class="flex items-center gap-2">
+            <input type="text" #message placeholder="Type your message..." (keyup.enter)="!inputDisabled && sendMessage(message)" [disabled]="inputDisabled"
+                class="flex-1 bg-gray-100 dark:bg-neutral-800 border-none rounded-full px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none disabled:opacity-50">
+            <button (click)="sendMessage(message)" [disabled]="inputDisabled"
+                class="w-10 h-10 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center transition-colors shrink-0 shadow-md">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                </svg>
+            </button>
+        </div>
+    </div>
+    }
+</div>

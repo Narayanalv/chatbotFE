@@ -26,7 +26,7 @@
 
                         <!-- Form Elements -->
                         <form class="flex flex-col gap-5"
-                            (submit)="$event.preventDefault(); login(email.value, password.value, rememberMe.checked)">
+                            (submit)="$event.preventDefault(); login(email.value, password.value)">
                             <div class="flex flex-col gap-1.5">
                                 <label class="text-sm font-bold text-gray-900 dark:text-white">Email address</label>
                                 <input #email type="email"
@@ -35,21 +35,29 @@
 
                             <div class="flex flex-col gap-1.5">
                                 <label class="text-sm font-bold text-gray-900 dark:text-white">Password</label>
-                                <input #password minlength="8" [min]="'8'" type="password"
-                                    class="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#1a1c23] text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 dark:focus:ring-[#6875f5]/50 dark:focus:border-[#6875f5] shadow-sm transition-all" />
+                                <div class="relative">
+                                    <input #password minlength="8" [min]="'8'" [type]="viewPasword ? 'text' : 'password'"
+                                        class="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#1a1c23] text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 dark:focus:ring-[#6875f5]/50 dark:focus:border-[#6875f5] shadow-sm transition-all" />
+                                    <button type="button" (click)="togglePassword()"
+                                        class="absolute inset-y-0 inset-e-5 flex items-center z-20 cursor-pointer text-muted-foreground rounded-e-md focus:outline-hidden focus:text-primary-focus">
+                                        <svg class="shrink-0 size-3.5" width="24" height="24" viewBox="0 0 24 24"
+                                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            @if (!viewPasword) {
+                                                <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24" />
+                                                <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68" />
+                                                <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61" />
+                                                <line x1="2" x2="22" y1="2" y2="22" />
+                                            } @else {
+                                                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                                                <circle cx="12" cy="12" r="3" />
+                                            }
+                                        </svg>
+                                    </button>
+                                </div>
                             </div>
 
-                            <div class="flex items-center justify-between pt-1">
-                                <label class="flex items-center gap-2.5 cursor-pointer group">
-                                    <input #rememberMe type="checkbox"
-                                        class="w-4 h-4 rounded border-gray-300 dark:border-gray-700 text-blue-600 dark:text-[#6875f5] focus:ring-blue-500 dark:focus:ring-[#6875f5] dark:bg-[#1a1c23] bg-white transition-colors cursor-pointer" />
-                                    <span
-                                        class="text-sm text-gray-700 dark:text-gray-300 font-medium group-hover:text-gray-900 dark:group-hover:text-white transition-colors">Remember
-                                        me</span>
-                                </label>
-                                <a href="#"
-                                    class="text-sm text-blue-600 dark:text-[#6875f5] hover:underline hover:text-blue-700 font-bold transition-colors">Forgot
-                                    password?</a>
+                            <div class="flex justify-end pt-1">
+                                <a href="#" class="text-sm text-blue-600 dark:text-[#6875f5] hover:underline hover:text-blue-700 font-bold transition-colors">Forgot password?</a>
                             </div>
 
                             <button type="submit" [disabled]="isLoading"

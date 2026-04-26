@@ -3,49 +3,51 @@ import { Router } from "@angular/router";
 import { ApiService } from "./apiCall";
 import { Injectable } from "@angular/core";
 import { access } from 'fs';
+import { ToastService } from './toastService/toast.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-    constructor(private apiService: ApiService, private router: Router) { }
+    constructor(private apiService: ApiService, private router: Router, private toast: ToastService) { }
 
     isLogin(): boolean {
-    if (typeof localStorage !== 'undefined') {
-        const accessToken = localStorage.getItem("accessToken");
-        return accessToken !== null && !this.isExpired(accessToken);
-    }
-    return false;
-}
-
-logout(): void {
-    if (typeof localStorage !== 'undefined') {
-        localStorage.removeItem("accessToken");
-
-        this.apiService.logout().subscribe({
-            next: () => {},
-            error: () => {}
-        });
-    }
-}
-
-isExpired(accessToken: string | null): boolean {
-    if (!accessToken) return true;
-
-    try {
-        const payload = accessToken.split('.')[1];
-        const decoded = JSON.parse(atob(payload));
-
-        console.log(decoded);
-
-        if (decoded.exp && decoded.app === "chatbot-ai") {
-            const exp = decoded.exp * 1000; // convert to ms
-            return Date.now() >= exp; // true if expired
+        if (typeof localStorage !== 'undefined') {
+            const accessToken = localStorage.getItem("accessToken");
+            return accessToken !== null && !this.isExpired(accessToken);
         }
-
-        return true; // invalid token
-    } catch (error) {
-        return true;
+        return false;
     }
-}
+
+    logout(): void {
+        if (typeof localStorage !== 'undefined') {
+            this.toast.showSuccess("Logout successfully");
+            localStorage.removeItem("accessToken");
+            this.apiService.logout().subscribe({
+                next: () => { },
+                error: () => { }
+            });
+        }
+        this.router.navigate(["/login"]);
+    }
+
+    isExpired(accessToken: string | null): boolean {
+        if (!accessToken) return true;
+
+        try {
+            const payload = accessToken.split('.')[1];
+            const decoded = JSON.parse(atob(payload));
+
+            console.log(decoded);
+
+            if (decoded.exp && decoded.app === "chatbot-ai") {
+                const exp = decoded.exp * 1000; // convert to ms
+                return Date.now() >= exp; // true if expired
+            }
+
+            return true; // invalid token
+        } catch (error) {
+            return true;
+        }
+    }
 
     // isLoginApi(): boolean {
     //     let isLoggedIn = false;

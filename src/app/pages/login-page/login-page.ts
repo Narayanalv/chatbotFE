@@ -52,12 +52,11 @@ export class LoginPage implements OnInit {
     this.page = 'verify';
   }
 
-  login(email: string, password: string, rememberMe: boolean) {
-    console.log(email, password, rememberMe);
-    this.apiService.login({ email, password, rememberMe }).
+  login(email: string, password: string) {
+    console.log(email, password);
+    this.apiService.login({ email, password }).
       subscribe({
         next: (res) => {
-          console.log(res);
           this.email = email;
           if (res.accessToken) {
             localStorage.setItem('accessToken', res.accessToken);
@@ -65,8 +64,6 @@ export class LoginPage implements OnInit {
           }
         },
         error: (err) => {
-          console.log(err);
-          this.toast.showError(err.error?.message || 'Login failed. Please try again.');
         }
       })
   }
@@ -82,7 +79,6 @@ export class LoginPage implements OnInit {
         },
         error: (err) => {
           console.log(err);
-          this.toast.showError(err.error?.message || 'Login failed. Please try again.');
         }
       })
   }
@@ -100,7 +96,6 @@ export class LoginPage implements OnInit {
         },
         error: (err) => {
           console.log(err);
-          this.toast.showError(err.error?.message || 'Login failed. Please try again.');
         }
       })
   }

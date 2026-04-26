@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
+import { ChatUi } from '../chat-ui/chat-ui';
 import { DatePipe, NgClass } from '@angular/common';
 import { ChatBot, ApiKeyList, ApiKeyResponse, BaseResponse, ApiKey } from '../../model/todos.type';
 import { ToastService } from '../../api/toastService/toast.service';
@@ -6,7 +7,7 @@ import { ApiService } from '../../api/apiCall';
 
 @Component({
   selector: 'app-list-bots',
-  imports: [DatePipe, NgClass],
+  imports: [DatePipe, NgClass, ChatUi],
   templateUrl: './list-bots.html',
   styleUrl: './list-bots.css',
 })
@@ -18,12 +19,10 @@ export class ListBots {
 
   openDropdownId: number | null = null;
   viewApiBotId: number | null = null;
+  viewChatBotId: number | null = null;
 
   // Dummy data for rendering the UI. This should be populated by an API call when viewApiBotId changes.
-  apiKeys: ApiKeyList[] = [
-    // { id: 1, apiKey: 'sk-************************abc', status: true },
-    // { id: 2, apiKey: 'sk-************************xyz', status: false }
-  ];
+  apiKeys: ApiKeyList | null = null;
 
   constructor(
     private apiService: ApiService,
@@ -44,7 +43,6 @@ export class ListBots {
       },
       error: (err) => {
         console.log(err);
-        this.toast.showError(err.error.message);
       }
     });
   }
@@ -57,7 +55,6 @@ export class ListBots {
       },
       error: (err) => {
         console.log(err);
-        this.toast.showError(err.error.message);
       }
     });
   }
@@ -80,7 +77,6 @@ export class ListBots {
       },
       error: (err) => {
         console.log(err);
-        this.toast.showError(err.error.message);
       }
     });
   }
@@ -93,7 +89,6 @@ export class ListBots {
       },
       error: (err) => {
         console.error(err);
-        this.toast.showError(err.error?.message || 'Failed to delete API Key');
       }
     });
   }
@@ -140,10 +135,13 @@ export class ListBots {
         },
         error: (err) => {
           console.error(err);
-          this.toast.showError(err.error?.message || 'Failed to fetch unmasked API Key');
         }
       });
     }
+  }
+
+  viewChatBot(id: number) {
+    this.viewChatBotId = id;
   }
 
   toggleViewApi(botId: number) {

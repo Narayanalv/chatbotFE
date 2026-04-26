@@ -57,7 +57,7 @@ export interface ApiKey extends BaseResponse {
 }
 
 export interface ApiKeyResponse extends BaseResponse {
-    apiKeyList: ApiKeyList[]
+    apiKeyList: ApiKeyList
 }
 
 export interface ApiKeyList {
@@ -65,4 +65,8 @@ export interface ApiKeyList {
     apiKey: string // masked apiKey
     status: boolean
     visible?: boolean
+}
+
+export interface TestChatbot extends BaseResponse {
+    messageText: string
 }
