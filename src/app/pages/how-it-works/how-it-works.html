@@ -1,0 +1,53 @@
+<app-header />
+<main class="w-full min-h-[calc(100vh-5rem)] font-sans flex items-center justify-center py-16">
+    <section class="px-6 lg:px-8 w-full">
+        <div class="text-center mb-16">
+            <span class="text-blue-700 dark:text-blue-400 font-bold tracking-widest uppercase text-sm mb-4 block">The
+                Process</span>
+            <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-6">From Data to Dialogue</h2>
+            <p class="text-xl max-w-2xl mx-auto font-light">Understanding the complete lifecycle of a
+                Retrieval-Augmented Generation query.</p>
+        </div>
+
+        <div
+            class="max-w-4xl mx-auto relative border-l-4 border-gray-300 dark:border-gray-700 ml-6 lg:mx-auto space-y-16">
+            <!-- Step 1 -->
+            <div class="relative pl-12 lg:pl-20 lg:w-1/2 lg:ml-auto lg:pr-0 lg:pl-12">
+                <div
+                    class="absolute -left-6 top-0 w-12 h-12 bg-gray-200 dark:bg-gray-800 border-4 border-blue-500 text-blue-700 dark:text-blue-400 rounded-full flex items-center justify-center font-black text-xl shadow-sm z-10 lg:-left-[26px]">
+                    1</div>
+                <h3 class="text-2xl font-bold mb-4 tracking-tight">Ingestion & Chunking</h3>
+                <p class="leading-relaxed font-light">You upload a document via the frontend. Apache Tika extracts the
+                    raw text, and we split it into smaller, overlapping semantic chunks.</p>
+            </div>
+            <!-- Step 2 -->
+            <div class="relative pl-12 lg:pl-0 lg:w-1/2 lg:text-right lg:pr-12">
+                <div
+                    class="absolute -left-6 top-0 w-12 h-12 bg-gray-200 dark:bg-gray-800 border-4 border-blue-500 text-blue-700 dark:text-blue-400 rounded-full flex items-center justify-center font-black text-xl shadow-sm z-10 lg:left-auto lg:-right-[26px]">
+                    2</div>
+                <h3 class="text-2xl font-bold mb-4 tracking-tight">Vector Embedding</h3>
+                <p class="leading-relaxed font-light">Each chunk is converted into an array of floats (vectors)
+                    representing its mathematical meaning. These are saved securely to PostgreSQL.</p>
+            </div>
+            <!-- Step 3 -->
+            <div class="relative pl-12 lg:pl-20 lg:w-1/2 lg:ml-auto lg:pr-0 lg:pl-12">
+                <div
+                    class="absolute -left-6 top-0 w-12 h-12 bg-gray-200 dark:bg-gray-800 border-4 border-blue-500 text-blue-700 dark:text-blue-400 rounded-full flex items-center justify-center font-black text-xl shadow-sm z-10 lg:-left-[26px]">
+                    3</div>
+                <h3 class="text-2xl font-bold mb-4 tracking-tight">Semantic Query</h3>
+                <p class="leading-relaxed font-light">When a user asks a question, we embed that query. The system finds
+                    the top chunks in the database whose vectors are mathematically closest to the query's vector.</p>
+            </div>
+            <!-- Step 4 -->
+            <div class="relative pl-12 lg:pl-0 lg:w-1/2 lg:text-right lg:pr-12">
+                <div
+                    class="absolute -left-6 top-0 w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-black text-xl shadow-sm z-10 border-4 border-gray-200 dark:border-gray-800 lg:left-auto lg:-right-[26px]">
+                    4</div>
+                <h3 class="text-2xl font-bold mb-4 tracking-tight">LLM Generation</h3>
+                <p class="leading-relaxed font-light">Our local Large Language Models read the combined context of the
+                    query and retrieved chunks, generating a fluid, natural response that is guaranteed to be accurate.
+                </p>
+            </div>
+        </div>
+    </section>
+</main>

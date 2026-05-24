@@ -24,11 +24,25 @@ export interface Register extends Login {
 
 export interface VerifyOTP {
     email: string
-    otp: number
+    otp: string
 }
 
 export interface ResendOTP {
     email: string
+}
+
+export interface ForgotPassword {
+    email: string
+}
+
+export interface ResetPassword {
+    email: string
+    otp: string
+}
+
+export interface NewPassword {
+    password: string
+    confirmPassword: string
 }
 
 export interface AddChatBot {

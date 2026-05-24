@@ -19,6 +19,7 @@ export class LoginPage implements OnInit {
   isLoading: boolean;
   email: string;
   page: string;
+  newPassword: string;
 
 
   constructor(private apiService: ApiService, private router: Router, private authService: AuthService, private toast: ToastService) {
@@ -27,6 +28,7 @@ export class LoginPage implements OnInit {
     this.isLogin = false;
     this.isLoading = false;
     this.email = '';
+    this.newPassword = '';
     this.page = 'login';
   }
 
@@ -64,6 +66,7 @@ export class LoginPage implements OnInit {
           }
         },
         error: (err) => {
+          this.toast.showError(err.error.message);
         }
       })
   }
@@ -79,13 +82,14 @@ export class LoginPage implements OnInit {
         },
         error: (err) => {
           console.log(err);
+          this.toast.showError(err.error.message);
         }
       })
   }
 
   verifyOtp(otp: string) {
     console.log(otp);
-    this.apiService.verifyOTP({ email: this.email, otp: Number(otp) }).
+    this.apiService.verifyOTP({ email: this.email, otp: otp }).
       subscribe({
         next: (res) => {
           console.log(res);
@@ -95,8 +99,59 @@ export class LoginPage implements OnInit {
           this.router.navigate(['/']);
         },
         error: (err) => {
-          console.log(err);
+          this.toast.showError(err.error.message);
         }
       })
+  }
+
+  forgotPassword(email: string) {
+    this.isLoading = true;
+    this.apiService.forgotPassword({ email }).subscribe({
+      next: (res) => {
+        this.email = email;
+        this.isLoading = false;
+        this.toggleForm('forgot-verify');
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.toast.showError(err.error?.message ?? 'Something went wrong');
+      }
+    });
+  }
+
+  verifyForgotOtp(otp: string) {
+    this.isLoading = true;
+    this.apiService.verifyForgot({ email: this.email, otp: otp }).subscribe({
+      next: (res) => {
+        this.isLoading = false;
+        if (res.accessToken) {
+          localStorage.setItem('accessToken', res.accessToken);
+        }
+        this.toggleForm('reset');
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.toast.showError(err.error?.message ?? 'Something went wrong');
+      }
+    });
+  }
+
+  resetPassword(password: string, confirmPassword: string) {
+    if (password !== confirmPassword) {
+      this.toast.showError('Passwords do not match');
+      return;
+    }
+    this.isLoading = true;
+    this.apiService.resetPassword({ password, confirmPassword }).subscribe({
+      next: (res) => {
+        this.isLoading = false;
+        localStorage.removeItem('accessToken');
+        this.toggleForm('login');
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.toast.showError(err.error?.message ?? 'Something went wrong');
+      }
+    });
   }
 }

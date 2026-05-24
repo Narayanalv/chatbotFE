@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
 import { switchMap, from } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { AddChatBot, ApiKey, ApiKeyResponse, BaseResponse, ChatBotResponse, Login, LoginResponse, Register, TestChatbot, VerifyOTP, VerifyOTPResponse } from '../model/todos.type';
+import { AddChatBot, ApiKey, ApiKeyResponse, BaseResponse, ChatBotResponse, ForgotPassword, Login, LoginResponse, NewPassword, Register, ResetPassword, TestChatbot, VerifyOTP, VerifyOTPResponse } from '../model/todos.type';
 import { AuthService, getAccessToken } from './auth';
 import { ToastService } from './toastService/toast.service';
 
@@ -14,6 +14,8 @@ export const apiEndpoints = {
     login: `${API_BASE_URL}/api/login`,
     register: `${API_BASE_URL}/api/register`,
     verifyOTP: `${API_BASE_URL}/api/verifyOTP`,
+    verifyForgot: `${API_BASE_URL}/api/verifyForgot`,
+    changePassword: `${API_BASE_URL}/api/changePassword`,
     addChatBot: `${API_BASE_URL}/api/addChatBot`,
     createApiKey: `${API_BASE_URL}/api/createApiKey`,
     getApiKey: `${API_BASE_URL}/api/getApiKey`,
@@ -23,6 +25,8 @@ export const apiEndpoints = {
     getKey: `${API_BASE_URL}/api/getKey`,
     deleteApiKey: `${API_BASE_URL}/api/deleteApiKey`,
     Chatbot: `${API_BASE_URL}/chat/Chatbot`,
+    forgotPassword: `${API_BASE_URL}/api/forgotPassword`,
+    resetPassword: `${API_BASE_URL}/api/resetPassword`,
 };
 
 const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -39,12 +43,27 @@ export class ApiService {
 
     register(data: Register) {
         return this.http.post<BaseResponse>(apiEndpoints.register, data, { headers })
-            .pipe(switchMap(res => from(checkStatusCode<BaseResponse>(res, this.injector))));
+            .pipe(switchMap(res => from(checkStatusCode<BaseResponse>(res, this.injector, true))));
     }
 
     verifyOTP(data: VerifyOTP) {
         return this.http.post<VerifyOTPResponse>(apiEndpoints.verifyOTP, data, { headers })
-            .pipe(switchMap(res => from(checkStatusCode<VerifyOTPResponse>(res, this.injector))));
+            .pipe(switchMap(res => from(checkStatusCode<VerifyOTPResponse>(res, this.injector, true))));
+    }
+
+    verifyForgot(data: VerifyOTP) {
+        return this.http.post<VerifyOTPResponse>(apiEndpoints.verifyForgot, data, { headers })
+            .pipe(switchMap(res => from(checkStatusCode<VerifyOTPResponse>(res, this.injector, true))));
+    }
+
+    forgotPassword(data: ForgotPassword) {
+        return this.http.post<BaseResponse>(apiEndpoints.forgotPassword, data, { headers })
+            .pipe(switchMap(res => from(checkStatusCode<BaseResponse>(res, this.injector, true))));
+    }
+
+    resetPassword(data: NewPassword) {
+        return this.http.post<BaseResponse>(apiEndpoints.resetPassword, data, { headers })
+            .pipe(switchMap(res => from(checkStatusCode<BaseResponse>(res, this.injector, true))));
     }
 
     addChatBot(data: AddChatBot) {
@@ -56,13 +75,13 @@ export class ApiService {
             'Content-Type': 'multipart/form-data'
         })
         return this.http.post<BaseResponse>(apiEndpoints.addChatBot, formData)
-            .pipe(switchMap(res => from(checkStatusCode<BaseResponse>(res, this.injector))));
+            .pipe(switchMap(res => from(checkStatusCode<BaseResponse>(res, this.injector, true))));
     }
 
     createApiKey(id: number) {
         headers.set('Authorization', `Bearer ${getAccessToken()}`);
         return this.http.get<BaseResponse>(`${apiEndpoints.createApiKey}/${id}`, { headers })
-            .pipe(switchMap(res => from(checkStatusCode<BaseResponse>(res, this.injector))));
+            .pipe(switchMap(res => from(checkStatusCode<BaseResponse>(res, this.injector, true))));
     }
 
     getBots() {
@@ -92,7 +111,7 @@ export class ApiService {
     deleteApiKey(id: number) {
         headers.set('Authorization', `Bearer ${getAccessToken()}`);
         return this.http.get<BaseResponse>(`${apiEndpoints.deleteApiKey}/${id}`, { headers })
-            .pipe(switchMap(res => from(checkStatusCode<BaseResponse>(res, this.injector))));
+            .pipe(switchMap(res => from(checkStatusCode<BaseResponse>(res, this.injector, true))));
     }
 
     logout() {
@@ -104,11 +123,14 @@ export class ApiService {
     testChatbot(id: number, message: string) {
         headers.set('Authorization', `Bearer ${getAccessToken()}`);
         return this.http.post<TestChatbot>(`${apiEndpoints.Chatbot}/${id}`, { message }, { headers })
-            .pipe(switchMap(res => from(checkStatusCode<TestChatbot>(res, this.injector))));
+            .pipe(switchMap(res => from(checkStatusCode<TestChatbot>(res, this.injector, false))));
     }
 }
-function checkStatusCode<T>(response: any, injector?: Injector): Promise<T> {
+function checkStatusCode<T>(response: any, injector?: Injector, showToast: boolean = false): Promise<T> {
     if (response.status === 200) {
+        if (showToast && injector && response.message) {
+            injector.get(ToastService).showSuccess(response.message);
+        }
         return Promise.resolve(response);
     } else if (response.status === 401) {
         console.log("error", response);

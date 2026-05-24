@@ -1,8 +1,7 @@
 .flip-container {
     perspective: 1500px;
-    overflow: hidden;
 }
-  
+
 .flip-inner {
     display: grid;
     transform-style: preserve-3d;
@@ -10,35 +9,41 @@
     position: relative;
     width: 100%;
 }
-  
+
 .flip-inner.is-flipped {
     transform: rotateY(180deg);
 }
-  
+
 .flip-front,
 .flip-back {
     grid-area: 1 / 1;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
     width: 100%;
-    /* Hide the opposite side from mouse clicks when flipped away */
-    pointer-events: none; 
 }
-  
+
 .flip-front {
+    position: relative;
     transform: rotateY(0deg);
+    pointer-events: auto;
 }
-  
+
 .flip-back {
+    position: absolute;
+    top: 0;
+    left: 0;
     transform: rotateY(180deg);
+    pointer-events: none;
+}
+
+.is-flipped .flip-front {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
 }
 
 .is-flipped .flip-back {
+    position: relative;
     pointer-events: auto;
-}
-.flip-front {
-    pointer-events: auto;
-}
-.is-flipped .flip-front {
-    pointer-events: none;
 }
