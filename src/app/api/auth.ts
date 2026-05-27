@@ -2,8 +2,9 @@ import { HttpInterceptorFn } from '@angular/common/http';
 import { Router } from "@angular/router";
 import { ApiService } from "./apiCall";
 import { Injectable } from "@angular/core";
-import { access } from 'fs';
 import { ToastService } from './toastService/toast.service';
+import { AuthConfig } from 'angular-oauth2-oidc';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -80,7 +81,13 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         return next(req);
     }
 
-    const token = localStorage.getItem('accessToken');
+    // Do not add the Authorization header to external requests (such as Google OpenID configuration)
+    const isExternal = req.url.startsWith('http') && !req.url.startsWith(environment.apiUrl);
+    if (isExternal) {
+        return next(req);
+    }
+
+    const token = typeof localStorage !== 'undefined' ? localStorage.getItem('accessToken') : null;
     if (token) {
         const cloned = req.clone({
             setHeaders: {
@@ -91,4 +98,13 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     }
 
     return next(req);
+};
+
+export const authConfig: AuthConfig = {
+    issuer: 'https://accounts.google.com',
+    strictDiscoveryDocumentValidation: false,
+    redirectUri: typeof window !== 'undefined' ? window.location.origin + '/login' : '',
+    clientId: '884028107017-o8r0i2ofu1i99en6i94ulpg1q4ujno5g.apps.googleusercontent.com',
+    scope: 'openid email profile',
+    showDebugInformation: true,
 };

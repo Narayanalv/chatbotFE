@@ -3,8 +3,9 @@ import { Injectable, Injector } from '@angular/core';
 import { switchMap, from } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { AddChatBot, ApiKey, ApiKeyResponse, BaseResponse, ChatBotResponse, ForgotPassword, Login, LoginResponse, NewPassword, Register, ResetPassword, TestChatbot, VerifyOTP, VerifyOTPResponse } from '../model/todos.type';
-import { AuthService, getAccessToken } from './auth';
+import { authConfig, AuthService, getAccessToken } from './auth';
 import { ToastService } from './toastService/toast.service';
+import { OAuthService } from 'angular-oauth2-oidc';
 
 // You can access your Base API URL like this:
 export const API_BASE_URL = environment.apiUrl;
@@ -34,7 +35,9 @@ const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
-    constructor(private http: HttpClient, private injector: Injector) { }
+    constructor(private http: HttpClient, private injector: Injector, private oAuth: OAuthService) {
+        this.oAuth.configure(authConfig);
+    }
 
     login(data: Login) {
         return this.http.post<LoginResponse>(apiEndpoints.login, data, { headers })
@@ -124,6 +127,20 @@ export class ApiService {
         headers.set('Authorization', `Bearer ${getAccessToken()}`);
         return this.http.post<TestChatbot>(`${apiEndpoints.Chatbot}/${id}`, { message }, { headers })
             .pipe(switchMap(res => from(checkStatusCode<TestChatbot>(res, this.injector, false))));
+    }
+
+    googleLogin() {
+        this.oAuth.initLoginFlow(); // opens Google popup/screen
+    }
+
+    async processGoogleLogin() {
+        const result = await this.oAuth.loadDiscoveryDocumentAndTryLogin();
+        if (!this.oAuth.hasValidIdToken()) return null;
+
+        const idToken = this.oAuth.getIdToken();
+
+        // Send to .NET backend for validation + local JWT issue
+        return this.http.post('http://localhost:5003/api/googleauth/login', { idToken });
     }
 }
 function checkStatusCode<T>(response: any, injector?: Injector, showToast: boolean = false): Promise<T> {

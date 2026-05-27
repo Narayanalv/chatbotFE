@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Header } from '../header/header';
 import { RouterLink, Router } from '@angular/router';
 import { ApiService } from '../../api/apiCall';
-import { AuthService } from '../../api/auth';
+import { authConfig, AuthService } from '../../api/auth';
 import { ToastService } from '../../api/toastService/toast.service';
+import { OAuthService } from 'angular-oauth2-oidc';
 
 @Component({
   selector: 'app-login-page',
@@ -22,7 +23,7 @@ export class LoginPage implements OnInit {
   newPassword: string;
 
 
-  constructor(private apiService: ApiService, private router: Router, private authService: AuthService, private toast: ToastService) {
+  constructor(private apiService: ApiService, private oauthService: OAuthService, private router: Router, private authService: AuthService, private toast: ToastService) {
     this.viewPasword = false;
     this.viewCPassword = false;
     this.isLogin = false;
@@ -30,6 +31,8 @@ export class LoginPage implements OnInit {
     this.email = '';
     this.newPassword = '';
     this.page = 'login';
+    this.oauthService.configure(authConfig);
+    this.oauthService.loadDiscoveryDocumentAndTryLogin();
   }
 
   async ngOnInit() {
@@ -153,5 +156,9 @@ export class LoginPage implements OnInit {
         this.toast.showError(err.error?.message ?? 'Something went wrong');
       }
     });
+  }
+
+  async handleGoogleSignIn() {
+    this.oauthService.initImplicitFlow();
   }
 }
