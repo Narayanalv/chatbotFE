@@ -34,12 +34,18 @@
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M15 17h3a3 3 0 0 0 0-6h-.025a5.56 5.56 0 0 0 .025-.5A5.5 5.5 0 0 0 7.207 9.021C7.137 9.017 7.071 9 7 9a4 4 0 1 0 0 8h2.167M12 19v-9m0 0-2 2m2-2 2 2" />
                     </svg>
+                    @if (file.files && file.files.length > 0) {
+                    <p class="mb-2 text-sm text-green-600 dark:text-green-400 font-semibold">Selected: {{
+                        file.files[0].name }}</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Click to change file</p>
+                    } @else {
                     <p class="mb-2 text-sm text-gray-700 dark:text-gray-200"><span
                             class="font-semibold text-blue-600 dark:text-blue-400">Click to upload</span> or drag
                         and drop</p>
                     <p class="text-xs text-gray-500 dark:text-gray-400">Any supported document or file</p>
+                    }
                 </div>
-                <input id="dropzone-file" type="file" accept=".pdf" #file class="hidden" />
+                <input id="dropzone-file" type="file" accept=".pdf" #file (change)="0" class="hidden" />
             </label>
         </div>
 
