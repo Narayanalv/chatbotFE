@@ -73,7 +73,7 @@ export function getAccessToken(): string | null {
     return null;
 }
 
-const PUBLIC_URLS = ['/api/login', '/api/register', '/api/verifyOTP'];
+const PUBLIC_URLS = ['/api/login', '/api/register', '/api/verifyOTP', '/api/auth/google'];
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
     const isPublic = PUBLIC_URLS.some(url => req.url.includes(url));

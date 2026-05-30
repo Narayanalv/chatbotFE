@@ -30,9 +30,50 @@ export class LoginPage implements OnInit {
     this.isLoading = false;
     this.email = '';
     this.newPassword = '';
-    this.page = 'login';
-    this.oauthService.configure(authConfig);
-    this.oauthService.loadDiscoveryDocumentAndTryLogin();
+
+    // Restore the page state from sessionStorage (survives the Google redirect)
+    const savedPage = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('google_auth_page') : null;
+    this.page = savedPage ?? 'login';
+
+    // Guard: angular-oauth2-oidc uses window internally, which doesn't exist during SSR
+    if (typeof window !== 'undefined') {
+      this.oauthService.configure(authConfig);
+      this.oauthService.loadDiscoveryDocumentAndTryLogin().then(() => {
+        if (this.oauthService.hasValidIdToken()) {
+          const idToken = this.oauthService.getIdToken();
+          console.log(idToken)
+          const authPage = sessionStorage.getItem('google_auth_page');
+          sessionStorage.removeItem('google_auth_page'); // Clean up
+
+          if (authPage === 'register') {
+            // User clicked "Sign up with Google" → register endpoint
+            this.apiService.googleRegisterWithToken(idToken).subscribe({
+              next: (res) => {
+                if (res.accessToken) {
+                  localStorage.setItem('accessToken', res.accessToken);
+                  this.router.navigate(['/']);
+                }
+              },
+              error: (err) => this.toast.showError(err.error?.message ?? 'Registration failed. Account may already exist.')
+            });
+          } else {
+            // User clicked "Sign in with Google" → login endpoint
+            this.apiService.googleLoginWithToken(idToken).subscribe({
+              next: (res) => {
+                if (res.accessToken) {
+                  localStorage.setItem('accessToken', res.accessToken);
+                  this.router.navigate(['/']);
+                }
+              },
+              error: (err) => {
+                console.log(err);
+                this.toast.showError(err.error?.message ?? 'Login failed. Please register first.')
+              }
+            });
+          }
+        }
+      });
+    }
   }
 
   async ngOnInit() {
@@ -158,7 +199,9 @@ export class LoginPage implements OnInit {
     });
   }
 
-  async handleGoogleSignIn() {
+  handleGoogleSignIn() {
+    // Save which page (login or register) the user is on before redirecting to Google
+    sessionStorage.setItem('google_auth_page', this.page);
     this.oauthService.initImplicitFlow();
   }
 }

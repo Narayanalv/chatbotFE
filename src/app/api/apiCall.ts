@@ -5,6 +5,7 @@ import { environment } from '../../environments/environment';
 import { AddChatBot, ApiKey, ApiKeyResponse, BaseResponse, ChatBotResponse, ForgotPassword, Login, LoginResponse, NewPassword, Register, ResetPassword, TestChatbot, VerifyOTP, VerifyOTPResponse } from '../model/todos.type';
 import { authConfig, AuthService, getAccessToken } from './auth';
 import { ToastService } from './toastService/toast.service';
+import { Router } from '@angular/router';
 import { OAuthService } from 'angular-oauth2-oidc';
 
 // You can access your Base API URL like this:
@@ -28,6 +29,8 @@ export const apiEndpoints = {
     Chatbot: `${API_BASE_URL}/chat/Chatbot`,
     forgotPassword: `${API_BASE_URL}/api/forgotPassword`,
     resetPassword: `${API_BASE_URL}/api/resetPassword`,
+    googleLogin: `${API_BASE_URL}/api/auth/google/login`,
+    googleRegister: `${API_BASE_URL}/api/auth/google/register`,
 };
 
 const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -36,7 +39,9 @@ const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 @Injectable({ providedIn: 'root' })
 export class ApiService {
     constructor(private http: HttpClient, private injector: Injector, private oAuth: OAuthService) {
-        this.oAuth.configure(authConfig);
+        if (typeof window !== 'undefined') {
+            this.oAuth.configure(authConfig);
+        }
     }
 
     login(data: Login) {
@@ -129,18 +134,14 @@ export class ApiService {
             .pipe(switchMap(res => from(checkStatusCode<TestChatbot>(res, this.injector, false))));
     }
 
-    googleLogin() {
-        this.oAuth.initLoginFlow(); // opens Google popup/screen
+    googleLoginWithToken(token: string) {
+        return this.http.post<LoginResponse>(apiEndpoints.googleLogin, { token }, { headers })
+            .pipe(switchMap(res => from(checkStatusCode<LoginResponse>(res, this.injector, true))));
     }
 
-    async processGoogleLogin() {
-        const result = await this.oAuth.loadDiscoveryDocumentAndTryLogin();
-        if (!this.oAuth.hasValidIdToken()) return null;
-
-        const idToken = this.oAuth.getIdToken();
-
-        // Send to .NET backend for validation + local JWT issue
-        return this.http.post('http://localhost:5003/api/googleauth/login', { idToken });
+    googleRegisterWithToken(token: string) {
+        return this.http.post<LoginResponse>(apiEndpoints.googleRegister, { token }, { headers })
+            .pipe(switchMap(res => from(checkStatusCode<LoginResponse>(res, this.injector, true))));
     }
 }
 function checkStatusCode<T>(response: any, injector?: Injector, showToast: boolean = false): Promise<T> {
@@ -151,7 +152,10 @@ function checkStatusCode<T>(response: any, injector?: Injector, showToast: boole
         return Promise.resolve(response);
     } else if (response.status === 401) {
         console.log("error", response);
-        if (injector) injector.get(AuthService).logout();
+        if (injector) {
+            injector.get(AuthService).logout();
+            injector.get(Router).navigate(["/login"]);
+        }
         return Promise.reject(response);
     } else {
         console.log("error", response);
