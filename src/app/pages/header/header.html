@@ -1,37 +1,45 @@
 <header
-    class="w-full h-20 bg-gray-400 dark:bg-[#1a1c23] border-b border-gray-200 dark:border-gray-800 transition-colors duration-300 flex items-center justify-between px-4 sm:px-8 shadow-sm">
+    class="w-full h-20 bg-gradient-to-b from-[#ebf5fb]/95 to-[#f0f9ff]/85 dark:from-[#070b19]/95 dark:to-black/85 backdrop-blur-md border-b border-[#b3d7f7]/50 dark:border-zinc-900/80 transition-all duration-300 flex items-center justify-between px-4 sm:px-8 shadow-sm z-40">
     <!-- Brand -->
-    <div class="flex items-center gap-2">
-        <img class="w-20 h-20" src="assets/logo.png" alt="MultiChat AI Logo">
-        <h1 class="text-xl font-extrabold tracking-tight text-gray-900 dark:text-white">ChatBot <span
-                class="text-blue-600">AI</span></h1>
+    <div class="flex items-center gap-3">
+        <img class="w-10 h-10 object-contain" src="assets/logo.png" alt="MultiChat AI Logo">
+        <h1 class="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+            ChatBot <span class="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">AI</span>
+        </h1>
     </div>
 
     <!-- Navigation -->
-    <nav class="hidden md:flex items-center gap-8">
+    <nav class="hidden md:flex items-center gap-2">
+        <a routerLink="/"
+            routerLinkActive="bg-[#dceefb]/80 dark:bg-cyan-950/45 text-cyan-600 dark:text-cyan-400 font-bold"
+            [routerLinkActiveOptions]="{exact: true}"
+            class="text-sm font-semibold text-slate-600 dark:text-zinc-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-all duration-200 px-3.5 py-2 rounded-xl">Home</a>
         @if(isUserLogin) {
         <a routerLink="/dashboard"
-            class="text-sm font-semibold text-black dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Dashboard</a>
+            routerLinkActive="bg-[#dceefb]/80 dark:bg-cyan-950/45 text-cyan-600 dark:text-cyan-400 font-bold"
+            class="text-sm font-semibold text-slate-600 dark:text-zinc-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-all duration-200 px-3.5 py-2 rounded-xl">Dashboard</a>
         }
-        <a routerLink="/"
-            class="text-sm font-semibold text-black dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Home</a>
         <a routerLink="/features"
-            class="text-sm font-semibold text-black dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Features</a>
+            routerLinkActive="bg-[#dceefb]/80 dark:bg-cyan-950/45 text-cyan-600 dark:text-cyan-400 font-bold"
+            class="text-sm font-semibold text-slate-600 dark:text-zinc-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-all duration-200 px-3.5 py-2 rounded-xl">Features</a>
         <a routerLink="/technology"
-            class="text-sm font-semibold text-black dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Technology
+            routerLinkActive="bg-[#dceefb]/80 dark:bg-cyan-950/45 text-cyan-600 dark:text-cyan-400 font-bold"
+            class="text-sm font-semibold text-slate-600 dark:text-zinc-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-all duration-200 px-3.5 py-2 rounded-xl">Technology
             (RAG)</a>
         <a routerLink="/how-it-works"
-            class="text-sm font-semibold text-black dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">How
+            routerLinkActive="bg-[#dceefb]/80 dark:bg-cyan-950/45 text-cyan-600 dark:text-cyan-400 font-bold"
+            class="text-sm font-semibold text-slate-600 dark:text-zinc-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-all duration-200 px-3.5 py-2 rounded-xl">How
             it Works</a>
         <a routerLink="/about"
-            class="text-sm font-semibold text-black dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">About</a>
+            routerLinkActive="bg-[#dceefb]/80 dark:bg-cyan-950/45 text-cyan-600 dark:text-cyan-400 font-bold"
+            class="text-sm font-semibold text-slate-600 dark:text-zinc-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-all duration-200 px-3.5 py-2 rounded-xl">About</a>
     </nav>
 
     <!-- Actions -->
     <div class="flex items-center gap-4">
         <!-- Theme Toggle -->
         <button (click)="toggleTheme()"
-            class="h-9 w-9 flex items-center justify-center rounded-lg p-1.5 border border-gray-200 dark:border-gray-700 hover:bg-gray-900 dark:hover:bg-gray-100 transition-colors text-gray-600 dark:text-gray-300">
+            class="h-9 w-9 flex items-center justify-center rounded-lg p-1.5 border border-[#b3d7f7] dark:border-slate-800/80 hover:bg-cyan-50/50 dark:hover:bg-slate-900/60 transition-colors text-slate-600 dark:text-slate-300">
             <svg class="fill-current w-5 h-5 hidden dark:block" viewBox="0 0 20 20">
                 <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
             </svg>
@@ -41,18 +49,14 @@
                     fill-rule="evenodd" clip-rule="evenodd"></path>
             </svg>
         </button>
-        <!-- <button type="button"
-            class="text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg px-5 py-2 shadow-sm transition-colors border border-transparent">
-            Get Started Free
-        </button> -->
         @if (!isUserLogin) {
         <a routerLink="/login"
-            class="text-sm font-semibold text-gray-900 border border-gray-300 dark:border-gray-600 dark:text-white bg-white dark:bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg px-5 py-2 transition-colors inline-flex items-center justify-center">
+            class="text-sm font-semibold text-slate-800 border border-[#b3d7f7] dark:border-slate-800 dark:text-white bg-transparent hover:bg-cyan-50/50 dark:hover:bg-slate-900/60 rounded-xl px-5 py-2 transition-all duration-200 inline-flex items-center justify-center">
             Login
         </a>
         }@else{
         <button type="button" (click)="logout()"
-            class="text-sm font-semibold text-gray-900 border border-gray-300 dark:border-gray-600 dark:text-white bg-white dark:bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg px-5 py-2 transition-colors">
+            class="text-sm font-semibold text-slate-800 border border-[#b3d7f7] dark:border-slate-800 dark:text-white bg-transparent hover:bg-cyan-50/50 dark:hover:bg-slate-900/60 rounded-xl px-5 py-2 transition-all duration-200 active:scale-98">
             Logout
         </button>
         }
