@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
 import { switchMap, from } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { AddChatBot, ApiKey, ApiKeyResponse, BaseResponse, ChatBotResponse, ForgotPassword, Login, LoginResponse, NewPassword, Register, ResetPassword, TestChatbot, VerifyOTP, VerifyOTPResponse } from '../model/todos.type';
+import { AddChatBot, ApiKey, ApiKeyResponse, BaseResponse, ChatBotResponse, ForgotPassword, HistoryResponse, Login, LoginResponse, NewPassword, Register, ResetPassword, TestChatbot, VerifyOTP, VerifyOTPResponse } from '../model/todos.type';
 import { authConfig, AuthService, getAccessToken } from './auth';
 import { ToastService } from './toastService/toast.service';
 import { Router } from '@angular/router';
@@ -27,6 +27,7 @@ export const apiEndpoints = {
     getKey: `${API_BASE_URL}/api/getKey`,
     deleteApiKey: `${API_BASE_URL}/api/deleteApiKey`,
     Chatbot: `${API_BASE_URL}/chat/Chatbot`,
+    chatHistory: `${API_BASE_URL}/api/getBot/history`,
     forgotPassword: `${API_BASE_URL}/api/forgotPassword`,
     resetPassword: `${API_BASE_URL}/api/resetPassword`,
     googleLogin: `${API_BASE_URL}/api/auth/google/login`,
@@ -132,6 +133,13 @@ export class ApiService {
         headers.set('Authorization', `Bearer ${getAccessToken()}`);
         return this.http.post<TestChatbot>(`${apiEndpoints.Chatbot}/${id}`, { message }, { headers })
             .pipe(switchMap(res => from(checkStatusCode<TestChatbot>(res, this.injector, false))));
+    }
+
+    getChatHistory(chatBotId: number, page: number = 0, size: number = 50) {
+        return this.http.get<HistoryResponse>(
+            `${apiEndpoints.chatHistory}/${chatBotId}?page=${page}&size=${size}`,
+            { headers }
+        ).pipe(switchMap(res => from(checkStatusCode<HistoryResponse>(res, this.injector))));
     }
 
     googleLoginWithToken(token: string) {

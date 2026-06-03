@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { ChatUi } from '../chat-ui/chat-ui';
 import { DatePipe, NgClass } from '@angular/common';
-import { ChatBot, ApiKeyList, ApiKeyResponse, BaseResponse, ApiKey } from '../../model/todos.type';
+import { ChatBot, ApiKeyList, ApiKeyResponse, BaseResponse, ApiKey, ChatHistoryItem, HistoryResponse } from '../../model/todos.type';
 import { ToastService } from '../../api/toastService/toast.service';
 import { ApiService } from '../../api/apiCall';
 
@@ -20,6 +20,14 @@ export class ListBots {
   openDropdownId: number | null = null;
   viewApiBotId: number | null = null;
   viewChatBotId: number | null = null;
+  viewHistoryBotId: number | null = null;
+
+  // History logs state
+  historyItems: ChatHistoryItem[] = [];
+  historyLoading: boolean = false;
+  historyPage: number = 0;
+  historyTotalPages: number = 0;
+  hasMoreHistoryLogs: boolean = false;
 
   // Dummy data for rendering the UI. This should be populated by an API call when viewApiBotId changes.
   apiKeys: ApiKeyList | null = null;
@@ -141,7 +149,13 @@ export class ListBots {
   }
 
   viewChatBot(id: number) {
-    this.viewChatBotId = id;
+    if (this.viewChatBotId === id) {
+      this.viewChatBotId = null;
+    } else {
+      this.viewChatBotId = id;
+      this.viewHistoryBotId = null;
+      this.viewApiBotId = null;
+    }
   }
 
   toggleViewApi(botId: number) {
@@ -149,10 +163,57 @@ export class ListBots {
       this.viewApiBotId = null;
     } else {
       this.viewApiBotId = botId;
+      this.viewHistoryBotId = null;
+      this.viewChatBotId = null;
       this.getApiKeys(botId);
       // Close dropdown when opening API view
       this.openDropdownId = null;
     }
+  }
+
+  toggleViewHistory(botId: number) {
+    if (this.viewHistoryBotId === botId) {
+      this.viewHistoryBotId = null;
+      this.historyItems = [];
+    } else {
+      this.viewHistoryBotId = botId;
+      this.viewApiBotId = null;
+      this.viewChatBotId = null;
+      this.historyItems = [];
+      this.historyPage = 0;
+      this.hasMoreHistoryLogs = false;
+      this.loadHistoryLogs(botId, 0);
+      this.openDropdownId = null;
+    }
+  }
+
+  loadHistoryLogs(botId: number, page: number) {
+    this.historyLoading = true;
+    this.cdr.detectChanges();
+    this.apiService.getChatHistory(botId, page, 10).subscribe({
+      next: (res: HistoryResponse) => {
+        if (res.history && res.history.length > 0) {
+          this.historyItems = [...this.historyItems, ...res.history];
+          this.historyPage = res.currentPage;
+          this.historyTotalPages = res.totalPages;
+          this.hasMoreHistoryLogs = res.currentPage < res.totalPages - 1;
+        } else {
+          this.hasMoreHistoryLogs = false;
+        }
+        this.historyLoading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Failed to load history logs:', err);
+        this.historyLoading = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  loadMoreHistoryLogs(botId: number) {
+    if (!this.hasMoreHistoryLogs || this.historyLoading) return;
+    this.loadHistoryLogs(botId, this.historyPage + 1);
   }
 
   getBotStatus(chunkedData: string | number): string {

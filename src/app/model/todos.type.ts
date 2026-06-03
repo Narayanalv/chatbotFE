@@ -84,3 +84,17 @@ export interface ApiKeyList {
 export interface TestChatbot extends BaseResponse {
     messageText: string
 }
+
+export interface ChatHistoryItem {
+    id: number;
+    message: string;
+    responseMessage: string;
+    createdAt: string;
+}
+
+export interface HistoryResponse extends BaseResponse {
+    history: ChatHistoryItem[];
+    currentPage: number;
+    totalPages: number;
+    totalItems: number;
+}
