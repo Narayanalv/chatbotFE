@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable, Injector } from '@angular/core';
+import { Injectable, Injector, signal } from '@angular/core';
 import { switchMap, from } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { AddChatBot, ApiKey, ApiKeyResponse, BaseResponse, ChatBotResponse, ForgotPassword, HistoryResponse, Login, LoginResponse, NewPassword, Register, ResetPassword, TestChatbot, VerifyOTP, VerifyOTPResponse } from '../model/todos.type';
@@ -39,10 +39,23 @@ const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
+    public isLoading = signal(false);
+    private activeRequests = 0;
+
     constructor(private http: HttpClient, private injector: Injector, private oAuth: OAuthService) {
         if (typeof window !== 'undefined') {
             this.oAuth.configure(authConfig);
         }
+    }
+
+    incrementRequests() {
+        this.activeRequests++;
+        this.isLoading.set(true);
+    }
+
+    decrementRequests() {
+        this.activeRequests = Math.max(0, this.activeRequests - 1);
+        this.isLoading.set(this.activeRequests > 0);
     }
 
     login(data: Login) {

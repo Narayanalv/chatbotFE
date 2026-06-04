@@ -72,8 +72,8 @@
 
                 <!-- Social Logins -->
                 <div>
-                    <button type="button" (click)="handleGoogleSignIn()"
-                        class="w-full flex items-center justify-center gap-3 px-4 py-2.5 border border-[#b3d7f7] dark:border-zinc-800 bg-[#dceefb]/40 dark:bg-zinc-900 hover:bg-[#dceefb]/60 dark:hover:bg-zinc-800 text-slate-800 dark:text-zinc-200 font-bold rounded-xl shadow-sm transition-all duration-200 active:scale-98 text-sm">
+                    <button type="button" (click)="handleGoogleSignIn()" [disabled]="isLoading"
+                        class="w-full flex items-center justify-center gap-3 px-4 py-2.5 border border-[#b3d7f7] dark:border-zinc-800 bg-[#dceefb]/40 dark:bg-zinc-900 hover:bg-[#dceefb]/60 dark:hover:bg-zinc-800 text-slate-800 dark:text-zinc-200 font-bold rounded-xl shadow-sm transition-all duration-200 active:scale-98 text-sm disabled:opacity-50 disabled:cursor-not-allowed">
                         <!-- Google SVG Logo -->
                         <svg class="w-5 h-5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -194,8 +194,8 @@
                         <div class="flex border-t grow border-[#b3d7f7] dark:border-zinc-800"></div>
                     </div>
 
-                    <button type="button" (click)="handleGoogleSignIn()"
-                        class="w-full flex items-center justify-center gap-3 px-4 py-2.5 border border-[#b3d7f7] dark:border-zinc-800 bg-[#dceefb]/40 dark:bg-zinc-900 hover:bg-[#dceefb]/60 dark:hover:bg-zinc-800 text-slate-800 dark:text-zinc-200 font-bold rounded-xl shadow-sm transition-all duration-200 active:scale-98 text-sm">
+                    <button type="button" (click)="handleGoogleSignIn()" [disabled]="isLoading"
+                        class="w-full flex items-center justify-center gap-3 px-4 py-2.5 border border-[#b3d7f7] dark:border-zinc-800 bg-[#dceefb]/40 dark:bg-zinc-900 hover:bg-[#dceefb]/60 dark:hover:bg-zinc-800 text-slate-800 dark:text-zinc-200 font-bold rounded-xl shadow-sm transition-all duration-200 active:scale-98 text-sm disabled:opacity-50 disabled:cursor-not-allowed">
                         <svg class="w-5 h-5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"

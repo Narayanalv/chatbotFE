@@ -17,17 +17,23 @@ export class LoginPage implements OnInit {
   isLogin: boolean;
   viewPasword: boolean;
   viewCPassword: boolean;
-  isLoading: boolean;
+  private _isLoading = false;
+  get isLoading(): boolean {
+    return this.apiService.isLoading() || this._isLoading;
+  }
+  set isLoading(val: boolean) {
+    this._isLoading = val;
+  }
   email: string;
   page: string;
   newPassword: string;
 
 
-  constructor(private apiService: ApiService, private oauthService: OAuthService, private router: Router, private authService: AuthService, private toast: ToastService) {
+  constructor(public apiService: ApiService, private oauthService: OAuthService, private router: Router, private authService: AuthService, private toast: ToastService) {
     this.viewPasword = false;
     this.viewCPassword = false;
     this.isLogin = false;
-    this.isLoading = false;
+    this._isLoading = false;
     this.email = '';
     this.newPassword = '';
 

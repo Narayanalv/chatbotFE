@@ -27,7 +27,7 @@ export class Dashboard implements OnInit {
   botsLoading: boolean = false;
   constructor(
     private authService: AuthService,
-    private apiService: ApiService,
+    public apiService: ApiService,
     private router: Router,
     private toast: ToastService,
     private cdr: ChangeDetectorRef

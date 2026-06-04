@@ -14,7 +14,7 @@ export class AddBot {
   @Output() close = new EventEmitter<void>();
   @Output() loadBots = new EventEmitter<void>();
 
-  constructor(private apiService: ApiService, private toast: ToastService) { }
+  constructor(public apiService: ApiService, private toast: ToastService) { }
 
   addBot(title: string, topic: string, file: File | null | undefined) {
     console.log(title, topic, file);

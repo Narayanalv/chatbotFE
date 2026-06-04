@@ -1,10 +1,11 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { Router } from "@angular/router";
 import { ApiService } from "./apiCall";
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { ToastService } from './toastService/toast.service';
 import { AuthConfig } from 'angular-oauth2-oidc';
 import { environment } from '../../environments/environment';
+import { finalize } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -107,4 +108,14 @@ export const authConfig: AuthConfig = {
     clientId: '884028107017-o8r0i2ofu1i99en6i94ulpg1q4ujno5g.apps.googleusercontent.com',
     scope: 'openid email profile',
     showDebugInformation: true,
+};
+
+export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
+    const apiService = inject(ApiService);
+    apiService.incrementRequests();
+    return next(req).pipe(
+        finalize(() => {
+            apiService.decrementRequests();
+        })
+    );
 };

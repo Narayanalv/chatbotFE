@@ -50,10 +50,12 @@
         </div>
 
         <div class="w-full flex justify-end gap-3 mt-4">
-            <button type="button" (click)="close.emit()"
-                class="py-2.5 px-6 rounded-xl text-slate-700 dark:text-gray-200 bg-[#dceefb]/40 dark:bg-zinc-900 border border-[#b3d7f7] dark:border-zinc-800 hover:bg-[#dceefb]/60 dark:hover:bg-zinc-800 transition-colors text-sm font-semibold shadow-sm">Cancel</button>
-            <button type="button" (click)="addBot(title.value, topic.value, file.files ? file.files[0] : null)"
-                class="py-2.5 px-6 rounded-xl text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-95 transition-all text-sm font-semibold shadow-lg shadow-cyan-500/25">Submit</button>
+            <button type="button" (click)="close.emit()" [disabled]="apiService.isLoading()"
+                class="py-2.5 px-6 rounded-xl text-slate-700 dark:text-gray-200 bg-[#dceefb]/40 dark:bg-zinc-900 border border-[#b3d7f7] dark:border-zinc-800 hover:bg-[#dceefb]/60 dark:hover:bg-zinc-800 transition-colors text-sm font-semibold shadow-sm disabled:opacity-50 disabled:cursor-not-allowed">Cancel</button>
+            <button type="button" (click)="addBot(title.value, topic.value, file.files ? file.files[0] : null)" [disabled]="apiService.isLoading()"
+                class="py-2.5 px-6 rounded-xl text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-95 transition-all text-sm font-semibold shadow-lg shadow-cyan-500/25 disabled:opacity-50 disabled:cursor-not-allowed">
+                {{ apiService.isLoading() ? 'Submitting...' : 'Submit' }}
+            </button>
         </div>
     </div>
 </div>

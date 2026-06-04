@@ -33,7 +33,7 @@ export class ListBots {
   apiKeys: ApiKeyList | null = null;
 
   constructor(
-    private apiService: ApiService,
+    public apiService: ApiService,
     private toast: ToastService,
     private cdr: ChangeDetectorRef
   ) { }
