@@ -29,7 +29,13 @@ export class ChatUi implements AfterViewChecked {
   constructor(private apiService: ApiService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
-    this.loadHistory();
+    this.messages.push({
+      sender: 'bot',
+      text: `Hi there! I'm <b>${this.botData.title}</b>. I'm ready to help you with anything related to <i>${this.botData.topic}</i>. Ask me anything!`,
+      time: new Date()
+    });
+    this.historyLoaded = true;
+    this.shouldScrollToBottom = true;
   }
 
   ngAfterViewChecked() {

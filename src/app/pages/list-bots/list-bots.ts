@@ -153,8 +153,6 @@ export class ListBots {
       this.viewChatBotId = null;
     } else {
       this.viewChatBotId = id;
-      this.viewHistoryBotId = null;
-      this.viewApiBotId = null;
     }
   }
 
@@ -164,7 +162,6 @@ export class ListBots {
     } else {
       this.viewApiBotId = botId;
       this.viewHistoryBotId = null;
-      this.viewChatBotId = null;
       this.getApiKeys(botId);
       // Close dropdown when opening API view
       this.openDropdownId = null;
@@ -178,7 +175,6 @@ export class ListBots {
     } else {
       this.viewHistoryBotId = botId;
       this.viewApiBotId = null;
-      this.viewChatBotId = null;
       this.historyItems = [];
       this.historyPage = 0;
       this.hasMoreHistoryLogs = false;
