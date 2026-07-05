@@ -29,6 +29,7 @@ export class AddBot {
         next: (res) => {
           console.log(res);
           this.loadBots.emit();
+          this.close.emit();
         },
         error: (err) => {
           console.log(err);

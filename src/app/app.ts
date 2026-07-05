@@ -1,9 +1,10 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 // import { MessageService } from 'primeng/api';
 import { PrimeNG } from 'primeng/config';
 import { ToastModule } from 'primeng/toast';
 import { Header } from "./pages/header/header";
+import { ApiService } from './api/apiCall';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +16,8 @@ import { Header } from "./pages/header/header";
 })
 export class App {
   protected readonly title = signal('chatbotFE');
+  public apiService = inject(ApiService);
+
   constructor(private primeng: PrimeNG) { }
 
   ngOnInit() {

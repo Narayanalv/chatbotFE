@@ -1,11 +1,11 @@
-import { HttpInterceptorFn } from '@angular/common/http';
+import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { Router } from "@angular/router";
 import { ApiService } from "./apiCall";
 import { Injectable, inject } from "@angular/core";
 import { ToastService } from './toastService/toast.service';
 import { AuthConfig } from 'angular-oauth2-oidc';
 import { environment } from '../../environments/environment';
-import { finalize } from 'rxjs';
+import { finalize, catchError, throwError } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -89,16 +89,31 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     }
 
     const token = typeof localStorage !== 'undefined' ? localStorage.getItem('accessToken') : null;
+    let requestToForward = req;
     if (token) {
-        const cloned = req.clone({
+        requestToForward = req.clone({
             setHeaders: {
                 Authorization: `Bearer ${token}`
             }
         });
-        return next(cloned);
     }
 
-    return next(req);
+    const router = inject(Router);
+    const toast = inject(ToastService);
+
+    return next(requestToForward).pipe(
+        catchError((error) => {
+            if (error instanceof HttpErrorResponse && error.status === 401) {
+                console.log("Unauthorized request intercepted", error);
+                if (typeof localStorage !== 'undefined') {
+                    localStorage.removeItem("accessToken");
+                }
+                toast.showError("Session expired or unauthorized. Please login again.");
+                router.navigate(["/login"]);
+            }
+            return throwError(() => error);
+        })
+    );
 };
 
 export const authConfig: AuthConfig = {
