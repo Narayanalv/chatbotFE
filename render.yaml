@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: chatbot-fe
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: node dist/chatbotFE/server/server.mjs
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: NODE_VERSION
+        value: 20
