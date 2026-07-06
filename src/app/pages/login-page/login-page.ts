@@ -106,10 +106,21 @@ export class LoginPage implements OnInit {
 
   login(email: string, password: string) {
     console.log(email, password);
-    this.apiService.login({ email, password }).
+    const trimmedEmail = email.trim();
+    const trimmedPassword = password.trim();
+
+    if (!trimmedEmail) {
+      this.toast.showError('Please enter your email address');
+      return;
+    }
+    if (!trimmedPassword) {
+      this.toast.showError('Please enter your password');
+      return;
+    }
+    this.apiService.login({ email: trimmedEmail, password: trimmedPassword }).
       subscribe({
         next: (res) => {
-          this.email = email;
+          this.email = trimmedEmail;
           if (res.accessToken) {
             localStorage.setItem('accessToken', res.accessToken);
             this.router.navigate(['/']);
@@ -123,11 +134,40 @@ export class LoginPage implements OnInit {
 
   register(name: string, email: string, password: string, confirmPassword: string) {
     console.log(name, email, password, confirmPassword);
-    this.apiService.register({ name, email, password, confirmPassword }).
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim();
+    const trimmedPassword = password.trim();
+    const trimmedConfirmPassword = confirmPassword.trim();
+
+    if (!trimmedName) {
+      this.toast.showError('Please enter your full name');
+      return;
+    }
+    if (!trimmedEmail) {
+      this.toast.showError('Please enter your email address');
+      return;
+    }
+    if (!trimmedPassword) {
+      this.toast.showError('Please enter a password');
+      return;
+    }
+    if (trimmedPassword.length < 8) {
+      this.toast.showError('Password must be at least 8 characters');
+      return;
+    }
+    if (!trimmedConfirmPassword) {
+      this.toast.showError('Please confirm your password');
+      return;
+    }
+    if (trimmedPassword !== trimmedConfirmPassword) {
+      this.toast.showError('Passwords do not match');
+      return;
+    }
+    this.apiService.register({ name: trimmedName, email: trimmedEmail, password: trimmedPassword, confirmPassword: trimmedConfirmPassword }).
       subscribe({
         next: (res) => {
           console.log(res);
-          this.email = email;
+          this.email = trimmedEmail;
           this.toggleForm('verify');
         },
         error: (err) => {
@@ -139,7 +179,17 @@ export class LoginPage implements OnInit {
 
   verifyOtp(otp: string) {
     console.log(otp);
-    this.apiService.verifyOTP({ email: this.email, otp: otp }).
+    const trimmedOtp = otp.trim();
+
+    if (!trimmedOtp) {
+      this.toast.showError('Please enter the verification code');
+      return;
+    }
+    if (trimmedOtp.length !== 6) {
+      this.toast.showError('Verification code must be 6 digits');
+      return;
+    }
+    this.apiService.verifyOTP({ email: this.email, otp: trimmedOtp }).
       subscribe({
         next: (res) => {
           console.log(res);
@@ -155,10 +205,16 @@ export class LoginPage implements OnInit {
   }
 
   forgotPassword(email: string) {
+    const trimmedEmail = email.trim();
+
+    if (!trimmedEmail) {
+      this.toast.showError('Please enter your email address');
+      return;
+    }
     this.isLoading = true;
-    this.apiService.forgotPassword({ email }).subscribe({
+    this.apiService.forgotPassword({ email: trimmedEmail }).subscribe({
       next: (res) => {
-        this.email = email;
+        this.email = trimmedEmail;
         this.isLoading = false;
         this.toggleForm('forgot-verify');
       },
@@ -170,8 +226,18 @@ export class LoginPage implements OnInit {
   }
 
   verifyForgotOtp(otp: string) {
+    const trimmedOtp = otp.trim();
+
+    if (!trimmedOtp) {
+      this.toast.showError('Please enter the verification code');
+      return;
+    }
+    if (trimmedOtp.length !== 6) {
+      this.toast.showError('Verification code must be 6 digits');
+      return;
+    }
     this.isLoading = true;
-    this.apiService.verifyForgot({ email: this.email, otp: otp }).subscribe({
+    this.apiService.verifyForgot({ email: this.email, otp: trimmedOtp }).subscribe({
       next: (res) => {
         this.isLoading = false;
         if (res.accessToken) {
@@ -187,12 +253,27 @@ export class LoginPage implements OnInit {
   }
 
   resetPassword(password: string, confirmPassword: string) {
-    if (password !== confirmPassword) {
+    const trimmedPassword = password.trim();
+    const trimmedConfirmPassword = confirmPassword.trim();
+
+    if (!trimmedPassword) {
+      this.toast.showError('Please enter a new password');
+      return;
+    }
+    if (trimmedPassword.length < 8) {
+      this.toast.showError('Password must be at least 8 characters');
+      return;
+    }
+    if (!trimmedConfirmPassword) {
+      this.toast.showError('Please confirm your password');
+      return;
+    }
+    if (trimmedPassword !== trimmedConfirmPassword) {
       this.toast.showError('Passwords do not match');
       return;
     }
     this.isLoading = true;
-    this.apiService.resetPassword({ password, confirmPassword }).subscribe({
+    this.apiService.resetPassword({ password: trimmedPassword, confirmPassword: trimmedConfirmPassword }).subscribe({
       next: (res) => {
         this.isLoading = false;
         localStorage.removeItem('accessToken');

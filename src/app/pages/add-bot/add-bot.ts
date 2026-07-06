@@ -18,9 +18,22 @@ export class AddBot {
 
   addBot(title: string, topic: string, file: File | null | undefined) {
     console.log(title, topic, file);
+    const trimmedTitle = title.trim();
+    const trimmedTopic = topic.trim();
+
+    if (!trimmedTitle) {
+      this.toast.showError("Please enter a title");
+      return;
+    }
+    if (!trimmedTopic) {
+      this.toast.showError("Please enter a topic");
+      return;
+    }
     if (!file) {
-      this.toast.showError("Please select a file")
-    } else {
+      this.toast.showError("Please select a file");
+      return;
+    }
+    {
       this.apiService.addChatBot({
         title,
         topic,
