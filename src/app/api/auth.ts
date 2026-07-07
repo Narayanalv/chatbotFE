@@ -127,6 +127,12 @@ export const authConfig: AuthConfig = {
 
 export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
     const apiService = inject(ApiService);
+    const isChatbotRequest = req.url.includes('/chat/Chatbot') || req.url.includes('/api/getBot/history');
+
+    if (isChatbotRequest) {
+        return next(req);
+    }
+
     apiService.incrementRequests();
     return next(req).pipe(
         finalize(() => {
